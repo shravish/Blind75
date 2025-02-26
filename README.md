@@ -82,3 +82,20 @@ Output: [7]
     1 <= k <= number of distinct elements in nums.
 ### Time & Space Complexity
 You should aim for a solution with O(n) time and O(n) space, where n is the size of the input array.
+
+The implementation of the solution uses Python's Counter class from the collections module to calculate the frequency of each element in the nums array. Counter is essentially a hash map or a dictionary that maps each element to its frequency.
+Here's a step-by-step walkthrough of the implementation:
+First, we use Counter(nums) to create a frequency map that holds the count of each number in the nums array.
+Next, we initialize an empty min-heap hp as a list to store tuples of the form (frequency, num), where frequency is the frequency of the number num in the array.
+We iterate over each item in the frequency map and add a tuple (freq, num) to the heap using the heappush function.
+While we add elements to the heap, we maintain the size of the heap to not exceed k. If adding an element causes the heap size to become greater than k, we pop the smallest item from the heap using heappop. This is done to keep only the k most frequent elements in the heap.
+After we finish processing all elements, the heap contains k tuples representing the k most frequent elements. The least frequent element is on the top of the min-heap, while the k-th most frequent element is the last one in the heap's binary tree representation.
+Finally, we build the result list by extracting the num from each tuple (freq, num) in the heap using a list comprehension: [v[1] for v in hp].
+Let's use a small example to illustrate the solution approach. Consider the array nums = [1,2,3,2,1,2] and k = 2. Our goal is to find the 2 most frequent elements in nums.
+We first use Counter(nums) to create a frequency map. This gives us {1: 2, 2: 3, 3: 1} where the key is the number from nums and the value is its frequency.
+We initialize an empty min-heap hp. It's going to store tuples like (frequency, num).
+We iterate over the frequency map and add each num and its frequency to hp. For example, (2, 1) for the number 1 with a frequency of 2. We use heappush to add the tuples to hp, so after this step hp might have [(1, 3), (2, 1)].
+The heap should not exceed the size k. In our case, k is 2, which means after we add the third element (3, 2), we need to pop the smallest frequency. So we end up with hp as [(2, 1), (3, 2)] after all the operations since (1, 3) would be the popped element because it had the lowest frequency.
+The heap now contains the tuples for the 2 most frequent elements. The tuple with the smallest frequency is at the top, ensuring that less frequent elements have been popped off when the size limit was exceeded.
+Finally, to build our result list, we extract the number from each tuple in the heap. Using list comprehension [v[1] for v in hp] we get [1, 2], which are the elements with the highest frequency. This is our final result and we can return it.
+Following this approach, we implemented an efficient solution to the problem that avoids sorting the entire frequency map directly and instead maintains a heap of size k to track the k most frequent elements.
